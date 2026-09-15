@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Softwareentwicklung Lernkarten</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
+<style>
+:root{
+  --ground:#F4F5F6; --surface:#FFFFFF; --surface2:#FAFAFB;
+  --ink:#20242A; --ink2:#3C424A; --muted:#727A83; --faint:#9AA1A9;
+  --line:#E4E6E9; --line2:#EEEFF1;
+  --accent:#3D4B5C; --accent-ink:#2B3644; --accent-soft:#ECEEF1;
+  --tag-bd:#C9CDD3;
+  --radius:10px;
+  --sans:'IBM Plex Sans',system-ui,-apple-system,sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ground:#16191D; --surface:#1E2227; --surface2:#191C21;
+    --ink:#E6E8EB; --ink2:#C4C9CF; --muted:#8B939C; --faint:#6C757E;
+    --line:#2C3138; --line2:#242930;
+    --accent:#A9B6C6; --accent-ink:#C6D0DC; --accent-soft:#262C34;
+    --tag-bd:#3A4048;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#16191D; --surface:#1E2227; --surface2:#191C21;
+  --ink:#E6E8EB; --ink2:#C4C9CF; --muted:#8B939C; --faint:#6C757E;
+  --line:#2C3138; --line2:#242930;
+  --accent:#A9B6C6; --accent-ink:#C6D0DC; --accent-soft:#262C34;
+  --tag-bd:#3A4048;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--sans);
+  font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1160px;margin:0 auto;padding-inline:24px}
+
+/* Header */
+header{padding-block:36px 8px}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--muted);margin:0 0 10px}
+h1{font-weight:700;font-size:clamp(25px,3.5vw,34px);line-height:1.1;letter-spacing:-.015em;
+  margin:0;color:var(--ink);text-wrap:balance}
+.sub{color:var(--muted);margin:9px 0 0;max-width:70ch;font-size:15px}
+.meta-row{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-top:18px}
+.exam{font-family:var(--mono);font-size:13px;color:var(--ink2);
+  border:1px solid var(--line);border-radius:7px;padding:5px 11px;background:var(--surface)}
+.progress{display:flex;align-items:center;gap:12px;flex:1;min-width:220px}
+.bar{flex:1;height:6px;background:var(--line);border-radius:999px;overflow:hidden}
+.bar>span{display:block;height:100%;width:0;background:var(--accent);transition:width .35s ease}
+.pcount{font-family:var(--mono);font-size:12.5px;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+
+.rule{border:none;border-top:1px solid var(--line);margin:22px 0 0}
+
+/* Layout */
+.layout{display:grid;grid-template-columns:250px 1fr;gap:40px;align-items:start;
+  padding-block:26px 70px}
+/* Sidebar nav */
+nav{position:sticky;top:20px}
+.navlabel{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--faint);margin:0 0 10px 2px}
+.navlist{display:flex;flex-direction:column;gap:2px}
+.navitem{display:flex;justify-content:space-between;align-items:center;gap:10px;width:100%;
+  text-align:left;background:none;border:none;border-radius:8px;padding:8px 10px;cursor:pointer;
+  font-family:var(--sans);font-size:14px;color:var(--ink2);line-height:1.3}
+.navitem:hover{background:var(--surface2);color:var(--ink)}
+.navitem[aria-current="true"]{background:var(--accent-soft);color:var(--ink);font-weight:600}
+.navitem .n{font-family:var(--mono);font-size:11.5px;color:var(--faint);font-variant-numeric:tabular-nums}
+.navitem[aria-current="true"] .n{color:var(--muted)}
+.navsep{height:1px;background:var(--line);margin:8px 4px}
+
+/* Content */
+.searchrow{display:flex;gap:10px;align-items:center;margin-bottom:8px}
+#q{flex:1;font-family:var(--sans);font-size:15px;color:var(--ink);background:var(--surface);
+  border:1px solid var(--line);border-radius:9px;padding:10px 13px}
+#q::placeholder{color:var(--faint)}
+#q:focus-visible,.navitem:focus-visible,.card:focus-visible,.know:focus-visible,.btn:focus-visible{
+  outline:2px solid var(--accent);outline-offset:2px}
+.btn{font-family:var(--mono);font-size:12.5px;color:var(--ink2);background:var(--surface);
+  border:1px solid var(--line);border-radius:8px;padding:9px 13px;cursor:pointer;white-space:nowrap}
+.btn:hover{border-color:var(--accent)}
+
+section{margin-top:34px}
+section:first-of-type{margin-top:14px}
+.sec-h{font-weight:700;font-size:19px;letter-spacing:-.01em;color:var(--ink);margin:0;text-wrap:balance}
+.sec-i{color:var(--muted);margin:6px 0 0;max-width:75ch;font-size:14.5px}
+.sec-meta{font-family:var(--mono);font-size:11px;color:var(--faint);margin-top:8px;letter-spacing:.04em}
+.cards{display:flex;flex-direction:column;gap:10px;margin-top:16px}
+
+/* Card */
+.card{display:block;width:100%;text-align:left;background:var(--surface);border:1px solid var(--line);
+  border-radius:var(--radius);padding:15px 17px;cursor:pointer;font-family:var(--sans);color:var(--ink);
+  transition:border-color .14s ease}
+.card:hover{border-color:var(--accent)}
+.card.tino{border-left:2px solid var(--accent)}
+.card.done{background:var(--surface2);border-color:var(--line2)}
+.card-top{display:flex;align-items:center;gap:9px;margin-bottom:6px;min-height:16px}
+.tlabel{font-family:var(--mono);font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--faint)}
+.tag{font-family:var(--mono);font-size:10px;letter-spacing:.04em;color:var(--muted);
+  border:1px solid var(--tag-bd);border-radius:4px;padding:1px 6px}
+.qrow{display:flex;align-items:flex-start;gap:12px;justify-content:space-between}
+.q{font-weight:600;font-size:16px;line-height:1.35;color:var(--ink);margin:0}
+.chev{flex:none;color:var(--faint);font-size:13px;margin-top:3px;transition:transform .2s ease}
+.card[aria-expanded="true"] .chev{transform:rotate(90deg)}
+.a{overflow:hidden;max-height:0;transition:max-height .28s ease}
+.card[aria-expanded="true"] .a{max-height:800px}
+.a ul{margin:13px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:7px}
+.a li{position:relative;padding-left:16px;font-size:14.5px;line-height:1.5;color:var(--ink2)}
+.a li::before{content:"–";position:absolute;left:0;top:0;color:var(--faint)}
+.foot-row{display:flex;justify-content:flex-end;margin-top:13px;padding-top:11px;border-top:1px solid var(--line2)}
+.know{font-family:var(--mono);font-size:11px;color:var(--muted);background:none;
+  border:1px solid var(--line);border-radius:7px;padding:4px 10px;cursor:pointer}
+.know[aria-pressed="true"]{color:var(--accent-ink);border-color:var(--accent);background:var(--accent-soft)}
+.empty{color:var(--muted);text-align:center;padding:56px 0;font-family:var(--mono);font-size:14px}
+
+/* Overview appendix */
+.ov{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;margin-top:12px}
+.ov h3{font-size:14px;margin:0 0 9px;color:var(--ink);font-weight:600}
+.ov ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:7px}
+.ov li{position:relative;padding-left:16px;font-size:13.5px;line-height:1.45;color:var(--ink2)}
+.ov li::before{content:"–";position:absolute;left:0;color:var(--faint)}
+
+footer{border-top:1px solid var(--line);padding-block:20px 44px;color:var(--muted);font-size:13px}
+
+@media (max-width:860px){
+  .layout{grid-template-columns:1fr;gap:18px;padding-top:16px}
+  nav{position:sticky;top:0;z-index:20;background:var(--ground);padding-block:10px;margin-inline:-24px;
+    padding-inline:24px;border-bottom:1px solid var(--line)}
+  .navlabel{display:none}
+  .navlist{flex-direction:row;overflow-x:auto;gap:6px;scrollbar-width:none}
+  .navlist::-webkit-scrollbar{display:none}
+  .navitem{white-space:nowrap;border:1px solid var(--line);border-radius:999px;padding:7px 12px}
+  .navitem .n{display:none}
+  .navsep{display:none}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <p class="eyebrow" id="eyebrow"></p>
+    <h1 id="title"></h1>
+    <p class="sub" id="sub"></p>
+    <div class="meta-row">
+      <span class="exam" id="exam"></span>
+      <div class="progress">
+        <div class="bar"><span id="barfill"></span></div>
+        <span class="pcount" id="pcount"></span>
+      </div>
+    </div>
+    <hr class="rule">
+  </header>
+</div>
+
+<div class="wrap">
+  <div class="layout">
+    <nav aria-label="Themen">
+      <p class="navlabel">Themen</p>
+      <div class="navlist" id="navlist"></div>
+    </nav>
+    <div>
+      <div class="searchrow">
+        <input id="q" type="search" placeholder="In allen Karten suchen …" aria-label="Karten durchsuchen">
+        <button class="btn" id="expand" type="button">Alle aufdecken</button>
+      </div>
+      <main id="main"></main>
+      <footer id="foot"></footer>
+    </div>
+  </div>
+</div>
+
+<script>
+const DATA = {"meta": {"title": "Prüfungsvorbereitung", "subtitle": "Softwareentwicklung", "exam": "Prüfung am 16.09.2026", "note": "Karteikarten aus der Aufgabenbesprechung, ergänzt um die Learnings der Softwareentwicklungs-Altklausuren (StadtRad/GastroGo, MediPlan/AutoFit, LernLift/GrünStrom) und thematisch geordnet. Karten mit „Altklausur“ stammen aus diesen Klausuren."}, "blocks": [{"id": "strategie", "title": "0 · Prüfungsstrategie", "short": "Prüfungsstrategie", "intro": "Wer weiß, wie bewertet wird, holt in jeder Aufgabe Punkte. Entscheidend sind Anforderungsbereich (AFB), Punktlogik und Fallbezug.", "cards": [{"q": "Wie funktioniert die Punktvergabe (AFB-Logik)?", "a": ["Punkte = Anzahl geforderter Elemente × AFB-Wert.", "AFB I = 1 P: nennen, benennen, aufzählen.", "AFB II = 2 P: beschreiben, erläutern, erklären, darstellen, modellieren.", "AFB III = 3 P: bewerten, beurteilen, begründen, ableiten, priorisieren, empfehlen."]}, {"q": "Warum passt der Operator manchmal nicht zur Punktzahl?", "a": ["Die Punkte richten sich nach dem gesamten Denkaufwand, nicht nur nach dem ersten Verb.", "„Identifizieren Sie … und erläutern Sie Ursache und Auswirkung“ = pro Element 3 P → AFB III.", "Faustregel: Punkte ÷ geforderte Elemente = tatsächlicher AFB-Wert.", "Eine Modellierung (UML) zählt in der Regel als AFB III."]}, {"q": "Wie baue ich eine AFB-III-Antwort auf (bewerten/begründen/empfehlen)?", "a": ["Dreischritt: Option/Maßnahme nennen → kurz erklären → begründen bzw. empfehlen.", "Bei Vergleichen beide Optionen gegenüberstellen und eine Empfehlung mit Fallbezug geben.", "Satzmuster: „Ich empfehle …, weil … im Kontext von [Projekt] …“."]}, {"q": "Wie viele Elemente soll ich liefern?", "a": ["Genau so viele wie gefordert – es zählen nur die ersten n.", "Bei „drei Risiken“ genau drei, klar voneinander getrennt."]}, {"q": "Was bringt in fast jeder Aufgabe zusätzliche Punkte?", "a": ["Fallbezug: konkrete Elemente der Ausgangssituation aufgreifen (Projektname, Nutzergruppen, Systeme).", "Generische Antworten ohne Bezug zum geschilderten Projekt kosten Punkte."]}]}, {"id": "vorbereitung", "title": "1 · Projektvorbereitung: Risiken, Kosten & Recht", "short": "Vorbereitung & Recht", "intro": "Der typische Einstieg jeder Klausur: Risiken erkennen, Kosten erfassen und den rechtlichen Rahmen abstecken.", "cards": [{"q": "Wie identifiziere ich Projektrisiken systematisch?", "a": ["An Risikokategorien entlanggehen: Mensch, Organisation, Technik, Recht.", "Mensch: fehlende Akzeptanz (Angst um Arbeitsplatz) → Widerstand, verzögerte Mitwirkung.", "Organisation: unterschätzter Aufwand, Dienstleister kennt interne Prozesse nicht → Verzug, Mehrkosten.", "Technik: inkompatible Schnittstellen, heterogene Altsysteme → Qualitätsmängel. Recht: Datenschutz/Compliance → rechtliche Folgen, Reputationsschaden.", "Bei AFB III je Risiko Ursache UND Auswirkung nennen."]}, {"q": "Welche Kostenarten fallen in einem Software-Projekt an?", "a": ["Entwicklungskosten (internes/externes Entwicklungsteam).", "Lizenzkosten (Frameworks, Karten-/Zahlungsdienste).", "Qualifizierungs-/Schulungskosten für die Anwender.", "Betriebs-/Infrastrukturkosten (Hosting, Wartung des Backends). Je Kostenart ein konkretes Beispiel."]}, {"q": "Welche organisatorischen und rechtlichen Aspekte muss ich beachten?", "a": ["Mitbestimmung des Betriebsrats bei mitarbeiterbezogenen Systemen.", "Betriebsvereinbarung als Regelungsrahmen.", "Datenschutz/DSGVO bei personenbezogenen Daten.", "Barrierefreiheit / Zugänglichkeit der Anwendung."]}]}, {"id": "anforderungen", "title": "2 · Anforderungen (Requirements)", "short": "Anforderungen", "intro": "Anforderungen aus mehreren Blickwinkeln erheben, sauber in funktional/nichtfunktional trennen und begründet priorisieren.", "cards": [{"q": "Wie gehe ich eine Anforderungsanalyse an?", "a": ["Aus mehreren Blickwinkeln denken statt nur an Features.", "Stakeholder und ihre Erwartungen (z. B. Gäste, Küche, Kasse, Leitung).", "Funktionale und nichtfunktionale Anforderungen.", "Schnittstellen zu anderen Systemen; rechtliche Anforderungen (Datenschutz, Zahlungssicherheit)."]}, {"q": "Was unterscheidet funktionale von nichtfunktionalen Anforderungen?", "titanova": true, "a": ["Funktional = was das System tut: Buchung, Bezahlung, Entriegelung per QR/Bluetooth.", "Nichtfunktional = wie gut es das tut: Verfügbarkeit, Performance, Usability, Skalierbarkeit, Sicherheit.", "Je Anforderung die Bedeutung kurz begründen."]}, {"q": "Wie priorisiere ich Anforderungen?", "a": ["Nach Geschäftswert und Risiko, mit Begründung.", "Hoch = geschäftskritisch (Zahlungsabwicklung, Datenschutz – sonst kein Umsatz bzw. rechtliche Folgen).", "Mittel = nützlich, nicht kritisch (Mehrsprachigkeit, mehrere Zahlungsdienste).", "Niedrig = nice-to-have (Auswertungs-/Analyse-Dashboard)."]}]}, {"id": "architektur", "title": "3 · Architektur & Designentscheidungen", "short": "Architektur & Design", "intro": "Die klassische AFB-III-Aufgabe: Optionen gegenüberstellen, Trade-offs benennen und eine fallbezogene Empfehlung geben.", "cards": [{"q": "Wie begründe ich eine Entwurfs-/Designentscheidung (AFB III)?", "a": ["Beide Optionen mit ihren Vor- und Nachteilen gegenüberstellen.", "Trade-off benennen (Aufwand vs. Nutzen, Flexibilität vs. Komplexität).", "Eine Empfehlung mit klarem Fallbezug ableiten."]}, {"q": "Native App vs. plattformübergreifend / PWA?", "a": ["Native: Zugriff auf Hardware-/Gerätefunktionen, aber je Betriebssystem eigene Entwicklung und Wartung.", "Plattformübergreifend / PWA: eine Codebasis, besser wartbar, geringerer Aufwand.", "Entscheidung nach Hardwarebedarf und verfügbarer Manpower."]}, {"q": "Monolith vs. Microservices / serviceorientiert?", "a": ["Microservices: besser skalierbar und wartbar, stärker entkoppelt – aber mehr Aufwand und Komplexität.", "Monolith: einfacher und schneller zu starten.", "Entscheidung nach Ressourcen und Entkopplungsgrad des Systems."]}, {"q": "Synchron vs. asynchron?", "a": ["Asynchron (z. B. Message Queue): puffert und entkoppelt die Kommunikation, robust bei Lastspitzen und Ausfällen.", "Synchron: einfacher, liefert ein direktes Ergebnis.", "Entscheidung nach Last, Echtzeitbedarf und Transaktionssicherheit."]}, {"q": "Welche weiteren Architekturachsen gibt es?", "titanova": true, "a": ["Zentrale vs. dezentrale Datenhaltung; Cloud vs. On-Premise.", "Videobereitstellung: Streaming-Dienst/CDN vs. Eigenhosting.", "Jeweils Anforderungen wie Datenschutz, Skalierbarkeit und Kosten abwägen."]}, {"q": "Cloud-Migration – was gehört wohin?", "a": ["Sensible Daten → On-Premise.", "Latenzkritische/schnelle Verarbeitung → Edge.", "Kostengünstig skalieren und viel speichern → Cloud (hybrid kombiniert beides)."]}]}, {"id": "integration", "title": "4 · Schnittstellen & Integration", "short": "Schnittstellen", "intro": "Wenn zwei Systeme zusammenspielen (App ↔ Station, Kasse ↔ KDS, Portal ↔ PVS), immer dieselben Aspekte prüfen.", "cards": [{"q": "Welche Aspekte prüfe ich bei der Integration zweier Systeme?", "a": ["Schnittstellenart/API: REST, WebSockets oder Message Queue.", "Datenformat (z. B. JSON) und einheitliches Datenmodell, damit keine Informationen verloren gehen.", "Echtzeit, wo nötig (z. B. WebSockets ans KDS).", "Transaktionssicherheit und Konsistenz, auch wenn ein System kurz offline ist."]}, {"q": "Wann nutze ich welche API-Art?", "titanova": true, "a": ["REST: Standard-Request/Response, breit unterstützt.", "WebSockets: Echtzeit-Push (z. B. Bestellungen sofort im Küchen-Display).", "Message Queue: entkoppelte, ausfalltolerante Übertragung (Daten gehen bei kurzem Ausfall nicht verloren)."]}, {"q": "Was gehört sonst noch zu einer Schnittstelle?", "titanova": true, "a": ["Branchenstandard/Protokoll wählen (z. B. HL7/FHIR im Gesundheitswesen).", "Authentifizierung und Verschlüsselung.", "Status- und Fehlerbehandlung (Timeouts, Wiederholungen, Fehlercodes)."]}]}, {"id": "datenbank", "title": "5 · Datenbank & Datenmodell", "short": "Datenbank", "intro": "Ein sauberer Datenbankentwurf sichert Konsistenz und Performance – und ist eine wiederkehrende Teilaufgabe.", "cards": [{"q": "Welche Aspekte gehören zum Datenbankentwurf?", "titanova": true, "a": ["Datenmodell: Entitäten und Beziehungen abbilden.", "Wahl des DBMS (relational vs. NoSQL) nach Anforderungen.", "Normalisierung und Integrität; Performance über Indizierung.", "Sicherung/Backup einplanen."]}]}, {"id": "uml", "title": "6 · UML-Modellierung", "short": "UML", "intro": "Modellierungsaufgaben zählen als AFB III. Diagrammtyp passend zum Verhalten wählen und sauber notieren.", "cards": [{"q": "Wann nutze ich ein Zustandsdiagramm?", "titanova": true, "a": ["Wenn ein Objekt Zustände über die Zeit durchläuft (z. B. Ampel < 50 / 50–80 / > 80 %, oder Terminbuchung: reserviert → bestätigt/storniert/abgelaufen).", "Elemente: Startzustand, Zustände, Übergänge mit Ereignis und Bedingung (Guard), Endzustand.", "Rückübergänge nicht vergessen (z. B. bei sinkender Auslastung)."]}, {"q": "Wann nutze ich ein Aktivitätsdiagramm?", "titanova": true, "a": ["Für Abläufe/Prozesse mit Schritten und Entscheidungen (z. B. Kursbuchung).", "Elemente: Start, Aktionen, Verzweigungen/Bedingungen, Zusammenführungen, Ende."]}, {"q": "Worauf achtet die Bewertung bei UML?", "titanova": true, "a": ["Korrekte UML-Notation und vollständige Zustände/Schritte.", "Übergänge mit auslösendem Ereignis und Bedingung.", "Start- und Endzustand vorhanden."]}]}, {"id": "qs", "title": "7 · Qualitätssicherung & Tests", "short": "QS & Tests", "intro": "Qualität systematisch absichern – von der Maßnahme im Prozess bis zum konkret formulierten Testfall.", "cards": [{"q": "Welche qualitätssichernden Maßnahmen unterstützen den Entwicklungsprozess?", "titanova": true, "a": ["Code-Reviews.", "Automatisierte Tests (Unit, Integration).", "Continuous Integration und eine Definition of Done."]}, {"q": "Welche Testverfahren sollte ich kennen?", "titanova": true, "a": ["Funktionaler Test (Blackbox) gegen die Anforderungen.", "Last-/Performancetest für Antwortzeiten unter Last.", "Regressionstest nach Fehlerbehebung; Integrationstest für das Zusammenspiel."]}, {"q": "Wie formuliere ich einen (Integrations-)Testfall?", "titanova": true, "a": ["Aufbau: Vorbedingung → Aktion → erwartetes Ergebnis.", "Konkrete Fälle inkl. Fehlerfall: erfolgreiche Buchung, ungültiges Ticket, fehlgeschlagene Zahlung, Doppelbuchung, Stornierung/Rückerstattung."]}]}, {"id": "evaluation", "title": "8 · Evaluation & Prozessoptimierung", "short": "Evaluation", "intro": "Nach der Pilotphase: den Entwicklungsprozess bewerten und aus den Messwerten begründete Verbesserungen ableiten.", "cards": [{"q": "Was betrachte ich bei der Prozessevaluation?", "titanova": true, "a": ["Termin- und Aufwandstreue.", "Fehler-/Qualitätskennzahlen.", "Prozessreife und Retrospektiven.", "Nutzer-/Kundenzufriedenheit."]}, {"q": "Wie leite ich Optimierungsmaßnahmen ab?", "titanova": true, "a": ["Aus konkreten Messwerten begründen, nicht allgemein.", "Antwortzeit senken (z. B. Caching); Datenmodell optimieren (Indizierung/Normalisierung).", "CI/CD und automatisierte Tests einführen; zusätzliche Tests für kritische Schnittstellen."]}]}, {"id": "sicherheit", "title": "9 · Datensicherheit & Datenschutz", "short": "Datensicherheit", "intro": "Konto-, Zahlungs- und personenbezogene Daten technisch und organisatorisch schützen – am CIA-Gedanken ausgerichtet.", "cards": [{"q": "Welche Maßnahmen (TOMs) sichern Konto- und Zahlungsdaten?", "a": ["Verschlüsselung at rest (Speicherung) und in transit (Übertragung).", "RBAC und Least Privilege; MFA zur Härtung.", "PCI-DSS-konforme Zahlung / Tokenisierung (ggf. an Dienstleister auslagern).", "Protokollierung/Logging, Backup/Redundanz, Schulungen."]}, {"q": "Welche Datensicherheitsrisiken gibt es und was hilft?", "a": ["Datenleck → Verschlüsselung (Schaden hoch: rechtliche Folgen).", "Datenverlust → Absicherung durch Backup.", "Unbefugter Zugriff → Härtung des Systems, z. B. MFA."]}, {"q": "Was ist beim Datenschutz (DSGVO) zu beachten?", "titanova": true, "a": ["Rechtsgrundlage, Datenminimierung, Pseudonymisierung.", "Besondere Kategorien (z. B. Gesundheitsdaten nach Art. 9) besonders schützen.", "Mandantentrennung und ein Lösch-/Aufbewahrungskonzept."]}, {"q": "Risiko und Gegenmaßnahme bei IoT-Anbindung?", "a": ["Erhöhte Angriffsfläche – bei erfolgreichem Angriff droht Totalausfall.", "Mitigation: Netzsegmentierung, damit sich ein Angriff nicht ausbreitet."]}]}, {"id": "doku", "title": "10 · Dokumentation & Schulung", "short": "Doku & Schulung", "intro": "Anwender abholen: verständliche Dokumentation in passender Form und wirksame Schulungen.", "cards": [{"q": "Was macht eine gute Anwenderdokumentation aus?", "titanova": true, "a": ["Zielgruppengerechte, verständliche Sprache.", "Aufgabenorientierte Struktur und gute Auffindbarkeit.", "Visuelle Hilfen und Beispiele.", "Vollständigkeit sowie Aktualität/Versionierung."]}, {"q": "Welche Bereitstellungsformen gibt es (bewerten)?", "titanova": true, "a": ["Gedrucktes Handbuch: stabil, aber schnell veraltet.", "In-App-/kontextsensitive Hilfe: aktuell und direkt im Kontext.", "Zentrale Wissensdatenbank / FAQ. Empfehlung fallbezogen begründen."]}, {"q": "Was beachte ich bei Schulungen?", "titanova": true, "a": ["Bedarfs- und Zielgruppenanalyse.", "Geeignete Schulungsform wählen.", "Schulungsunterlagen bereitstellen und den Erfolg kontrollieren."]}]}, {"id": "steuerung", "title": "11 · Projektsteuerung, Abnahme & Roll-out", "short": "Steuerung & Roll-out", "intro": "Das Projekt planen, steuern und sauber in den Betrieb überführen – der Abschluss fast jeder Klausur.", "cards": [{"q": "Was passiert in der Projektplanung?", "a": ["Vorhaben in Arbeitspakete zerlegen (Projektstrukturplan).", "Meilensteine und Termine mit Abhängigkeiten und Ressourcenplanung festlegen.", "Netzplan aufstellen, um Abhängigkeiten, Engstellen und den kritischen Pfad zu erkennen."]}, {"q": "Welche Steuerungs- und risikomindernden Maßnahmen gibt es?", "a": ["Stakeholder früh einbinden (z. B. Filialen) → Akzeptanz und realistische Anforderungen.", "Zeitpuffer einplanen und regelmäßig kontrollieren → Abweichungen früh erkennen.", "RACI nutzen → klare Verantwortlichkeiten und Rollen je Arbeitspaket."]}, {"q": "Was gehört zum Abnahme- und Übergabeverfahren?", "titanova": true, "a": ["Definierte Abnahmekriterien und Testprotokolle.", "Formale Abnahme mit dem Auftraggeber; Mängelmanagement.", "Übergabe der Artefakte (Code, Dokumentation)."]}, {"q": "Welche Roll-out-Strategie wähle ich?", "titanova": true, "a": ["Pilot (eine Filiale/Beta-Gruppe) mit anschließendem Wellen-Roll-out → risikoarm.", "Parallelbetrieb bzw. Rückfalloption im Übergang.", "Hypercare und Support direkt nach dem Go-Live."]}]}], "titanova_overview": {"title": "Anhang · Die Softwareentwicklungs-Altklausuren im Überblick", "intro": "Drei Klausuren mit je zwei Situationsaufgaben (je 100 Punkte). Alle folgen demselben Bogen – von Projektvorbereitung über Anforderungen, Architektur/Schnittstellen und UML bis Qualität/Test, Doku und Roll-out.", "sit1": ["Klausur I: StadtRad-App (Bike-Sharing) und GastroGo-Order (Gastro-Bestellsystem)", "Klausur II: MediPlan-Portal (Terminbuchung für Arztpraxen, Gesundheitsdaten) und AutoFit-WMS (Werkstattkette)", "Klausur III: LernLift-Plattform (E-Learning mit Videolektionen) und GrünStrom-Portal (Stadtwerke)"], "sit2": ["A1 Projektvorbereitung: Risiken, Kosten, Recht bzw. Anforderungen priorisieren", "A2 Anforderungen & Architektur: funktional/nichtfunktional, Designentscheidungen", "A3 Schnittstellen & UML: Integration, Datenbank, Zustands-/Aktivitätsdiagramm", "A4 Qualität & Evaluation: Testfälle, Prozessbewertung, Optimierung", "A5 Doku, Abnahme & Roll-out: Dokumentation, Schulung, Übergabe, Wellen-Roll-out"]}};
+const store = {
+  get(){ try{ return JSON.parse(localStorage.getItem("siv_known")||"{}"); }catch(e){ return {}; } },
+  set(o){ try{ localStorage.setItem("siv_known", JSON.stringify(o)); }catch(e){} }
+};
+let known = store.get(), filter = "all", expandAll = false, query = "";
+
+const CARDS = [];
+DATA.blocks.forEach(b => b.cards.forEach((c,i) => {
+  const tino = c.titanova === true;
+  CARDS.push({ id:b.id+"-"+i, block:b.id, blockShort:b.short, blockTitle:b.title, q:c.q, a:c.a, tino });
+}));
+const TOTAL = CARDS.length;
+const TINO = CARDS.filter(c=>c.tino).length;
+
+document.getElementById("eyebrow").textContent = DATA.meta.title + " · CLOUDHELDEN";
+document.getElementById("title").textContent = DATA.meta.subtitle;
+document.getElementById("sub").textContent = DATA.meta.note;
+document.getElementById("exam").textContent = DATA.meta.exam;
+document.getElementById("foot").innerHTML = TOTAL + " Karten in " + DATA.blocks.length +
+  " Themenblöcken. Karte anklicken deckt die Antwort auf; „sitzt“ speichert den Lernstand nur in diesem Browser.";
+
+// Sidebar nav
+const navEl = document.getElementById("navlist");
+function navItem(id,label,count){
+  const b=document.createElement("button"); b.className="navitem"; b.type="button"; b.dataset.id=id;
+  b.setAttribute("aria-current", id===filter);
+  b.innerHTML = '<span></span><span class="n">'+count+'</span>';
+  b.firstChild.textContent = label;
+  b.onclick=()=>{ filter=id; query=""; document.getElementById("q").value=""; render();
+    window.scrollTo({top:0,behavior:"smooth"}); };
+  return b;
+}
+function buildNav(){
+  navEl.innerHTML="";
+  navEl.appendChild(navItem("all","Alle Themen",TOTAL));
+  DATA.blocks.forEach(b=>navEl.appendChild(navItem(b.id, b.title, b.cards.length)));
+  const sep=document.createElement("div"); sep.className="navsep"; navEl.appendChild(sep);
+  navEl.appendChild(navItem("tino","Nur Altklausur",TINO));
+}
+buildNav();
+
+document.getElementById("expand").onclick=()=>{ expandAll=!expandAll;
+  document.getElementById("expand").textContent = expandAll?"Alle zuklappen":"Alle aufdecken";
+  document.querySelectorAll(".card").forEach(c=>c.setAttribute("aria-expanded",expandAll)); };
+document.getElementById("q").addEventListener("input",e=>{ query=e.target.value.trim().toLowerCase(); render(); });
+
+function cardEl(c){
+  const el=document.createElement("button");
+  el.className="card"+(c.tino?" tino":"")+(known[c.id]?" done":"");
+  el.type="button"; el.setAttribute("aria-expanded", expandAll);
+  const top=document.createElement("div"); top.className="card-top";
+  const tl=document.createElement("span"); tl.className="tlabel"; tl.textContent=c.blockShort;
+  top.appendChild(tl);
+  if(c.tino){ const t=document.createElement("span"); t.className="tag"; t.textContent="Altklausur"; top.appendChild(t); }
+  const qrow=document.createElement("div"); qrow.className="qrow";
+  const q=document.createElement("p"); q.className="q"; q.textContent=c.q;
+  const ch=document.createElement("span"); ch.className="chev"; ch.textContent="▶"; ch.setAttribute("aria-hidden","true");
+  qrow.appendChild(q); qrow.appendChild(ch);
+  const a=document.createElement("div"); a.className="a";
+  const ul=document.createElement("ul"); c.a.forEach(x=>{ const li=document.createElement("li"); li.textContent=x; ul.appendChild(li); });
+  a.appendChild(ul);
+  const fr=document.createElement("div"); fr.className="foot-row";
+  const kb=document.createElement("span"); kb.className="know"; kb.setAttribute("role","button");
+  kb.setAttribute("tabindex","0"); kb.setAttribute("aria-pressed", !!known[c.id]);
+  kb.textContent = known[c.id] ? "✓ sitzt" : "sitzt?";
+  const toggle=(ev)=>{ ev.stopPropagation(); known[c.id]=!known[c.id]; store.set(known);
+    kb.setAttribute("aria-pressed", !!known[c.id]); kb.textContent=known[c.id]?"✓ sitzt":"sitzt?";
+    el.classList.toggle("done", !!known[c.id]); updateProgress(); };
+  kb.onclick=toggle; kb.onkeydown=(ev)=>{ if(ev.key==="Enter"||ev.key===" "){ ev.preventDefault(); toggle(ev); } };
+  fr.appendChild(kb); a.appendChild(fr);
+  el.appendChild(top); el.appendChild(qrow); el.appendChild(a);
+  el.onclick=()=>{ el.setAttribute("aria-expanded", el.getAttribute("aria-expanded")!=="true"); };
+  return el;
+}
+function sec(title,intro,meta){
+  const s=document.createElement("section");
+  const h=document.createElement("h2"); h.className="sec-h"; h.textContent=title; s.appendChild(h);
+  if(intro){ const i=document.createElement("p"); i.className="sec-i"; i.textContent=intro; s.appendChild(i); }
+  if(meta){ const m=document.createElement("p"); m.className="sec-meta"; m.textContent=meta; s.appendChild(m); }
+  const g=document.createElement("div"); g.className="cards"; s.appendChild(g);
+  return {s,g};
+}
+function matches(c){ return (c.q+" "+c.a.join(" ")+" "+c.blockTitle).toLowerCase().includes(query); }
+
+function render(){
+  navEl.querySelectorAll(".navitem").forEach(n=>n.setAttribute("aria-current", n.dataset.id===filter && !query));
+  const main=document.getElementById("main"); main.innerHTML="";
+  if(query){
+    const list=CARDS.filter(matches);
+    if(!list.length){ main.innerHTML='<p class="empty">Keine Karten für „'+query+'“ gefunden.</p>'; return; }
+    const {s,g}=sec("Suchergebnisse", list.length+' Karten enthalten „'+query+'“.', null);
+    list.forEach(c=>g.appendChild(cardEl(c))); main.appendChild(s);
+  } else if(filter==="tino"){
+    const list=CARDS.filter(c=>c.tino);
+    const {s,g}=sec("Nur Altklausur", "Die Learnings aus der Titanova-Altklausur, themenübergreifend.", list.length+" Karten");
+    list.forEach(c=>g.appendChild(cardEl(c))); main.appendChild(s);
+  } else {
+    const blocks = filter==="all" ? DATA.blocks : DATA.blocks.filter(b=>b.id===filter);
+    blocks.forEach(b=>{
+      const cs=CARDS.filter(c=>c.block===b.id);
+      const {s,g}=sec(b.title, b.intro, cs.length+" Karten");
+      cs.forEach(c=>g.appendChild(cardEl(c))); main.appendChild(s);
+    });
+    if(filter==="all" && DATA.titanova_overview){
+      const ov=DATA.titanova_overview; const {s}=sec(ov.title, ov.intro, null);
+      [["Situationsaufgabe 1 · Analyse & Absicherung",ov.sit1],["Situationsaufgabe 2 · Umsetzung & Betrieb",ov.sit2]].forEach(([t,arr])=>{
+        const box=document.createElement("div"); box.className="ov";
+        const h=document.createElement("h3"); h.textContent=t; box.appendChild(h);
+        const ul=document.createElement("ul"); arr.forEach(x=>{ const li=document.createElement("li"); li.textContent=x; ul.appendChild(li); });
+        box.appendChild(ul); s.appendChild(box);
+      });
+      main.appendChild(s);
+    }
+  }
+  if(expandAll) document.querySelectorAll(".card").forEach(c=>c.setAttribute("aria-expanded","true"));
+}
+function updateProgress(){
+  const done=Object.values(known).filter(Boolean).length;
+  document.getElementById("barfill").style.width=(TOTAL?100*done/TOTAL:0)+"%";
+  document.getElementById("pcount").textContent=done+" / "+TOTAL+" sitzt";
+}
+render(); updateProgress();
+</script>
+</body>
+</html>
